@@ -1,15 +1,35 @@
 //
-//  BTRippleButtton.m
-//  BTSimpleRippleButton
+//  WYTinderSwipeRippleButtton.h
+//  Neon
 //
-//  Created by Balram Tiwari on 01/06/14.
-//  Copyright (c) 2014 Balram. All rights reserved.
+//  Created by wyan assert on 2017/11/14.
+//  Copyright © 2017年 NeonPopular. All rights reserved.
 //
+
 #import <QuartzCore/QuartzCore.h>
 #import "WYTinderSwipeRippleButtton.h"
 
+@interface WYTinderSwipeRippleButtton()
+
+@property (nonatomic, strong) UIImageView            *imageView;
+@property (nonatomic, strong) UIImage                *image;
+@property (nonatomic, strong) UITapGestureRecognizer *gesture;
+@property (nonatomic, strong) UIView                 *containerView;
+
+@property (nonatomic, strong) UIColor                *rippleColor;
+@property (nonatomic, strong) UIColor                *rippleBGColor;
+
+@property (nonatomic, assign) BOOL                   isRippleOn;
+@property (nonatomic, assign) BOOL                   isNextDismiss;
+
+@property (nonatomic, assign) SEL                    methodName;
+@property (nonatomic, strong) id                     superSender;
+
+@end
+
 @implementation WYTinderSwipeRippleButtton
 
+#pragma mark - LifeCycle
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -20,21 +40,16 @@
 }
 
 - (void)commonInitWithImage:(UIImage *)image andFrame:(CGRect) frame{
+    self.image = image;
     
-    containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-    [self addSubview:containerView];
-    [containerView mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    [self addSubview:self.containerView];
+    [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
     }];
     
-    imageView = [[UIImageView alloc]initWithImage:image];
-    imageView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
-    imageView.layer.borderColor = [UIColor whiteColor].CGColor;
-    imageView.layer.borderWidth = 3;
-    imageView.layer.cornerRadius = imageView.frame.size.height/2;
-    imageView.layer.masksToBounds = YES;
-    [self addSubview:imageView];
-    [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self addSubview:self.imageView];
+    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
     }];
     
@@ -42,8 +57,8 @@
     self.layer.borderWidth = 0;
     self.layer.borderColor = [UIColor whiteColor].CGColor;
     
-    gesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
-    [self addGestureRecognizer:gesture];
+    self.gesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
+    [self addGestureRecognizer:self.gesture];
     
 }
 
@@ -55,14 +70,14 @@
     
     if(self){
         [self commonInitWithImage:image andFrame:frame];
-        methodName = action;
-        superSender = sender;
+        self.methodName = action;
+        self.superSender = sender;
     }
     
     return self;
 }
 
-- (instancetype)initWithImage:(UIImage *)image andFrame:(CGRect)frame onCompletion:(completion)completionBlock {
+- (instancetype)initWithImage:(UIImage *)image andFrame:(CGRect)frame onCompletion:(WYTinderSwipeRippleButttonCompletion)completionBlock {
     self = [super initWithFrame:frame];
     
     if(self){
@@ -74,8 +89,10 @@
     return self;
 }
 
+
+#pragma mark - Public
 - (void)loadImage:(UIImage *)image {
-    imageView.image = image;
+    self.imageView.image = image;
 }
 
 - (void)triggleAnimation {
@@ -83,38 +100,39 @@
 }
 
 - (void)setRippleEffectWithColor:(UIColor *)color {
-    rippleColor = color;
+    self.rippleColor = color;
 }
 
 - (void)setRippeEffectEnabled:(BOOL)enabled {
-    isRippleOn = enabled;
+    self.isRippleOn = enabled;
 }
 
 - (void)setRippleEffectWithBGColor:(UIColor *)color {
-    rippleBGColor = color;
+    self.rippleBGColor = color;
 }
 
+
+#pragma mark - Private
 - (void)handleTap:(id)sender {
     [self handleTap:sender withAction:YES];
 }
 
 - (void)handleTap:(id)sender withAction:(BOOL)isAction {
-    if(isNextDismiss && !isAction) {
-        isNextDismiss = NO;
+    if(self.isNextDismiss && !isAction) {
+        self.isNextDismiss = NO;
         return;
     } else if(isAction) {
-        isNextDismiss = YES;
+        self.isNextDismiss = YES;
     }
     
-    if (isRippleOn) {
-        UIColor *stroke = rippleColor ? rippleColor : [UIColor colorWithWhite:0.8 alpha:0.8];
-        UIColor *fillColor = rippleBGColor ? rippleBGColor : [UIColor colorWithWhite:0.8 alpha:0.1];
+    if (self.isRippleOn) {
+        UIColor *stroke = self.rippleColor ?: [UIColor colorWithWhite:0.8 alpha:0.8];
+        UIColor *fillColor = self.rippleBGColor ?: [UIColor colorWithWhite:0.8 alpha:0.1];
         
         CGRect pathFrame = CGRectMake(-CGRectGetMidX(self.bounds), -CGRectGetMidY(self.bounds), self.bounds.size.width, self.bounds.size.height);
         UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:pathFrame cornerRadius:self.layer.cornerRadius];
         
-        // accounts for left/right offset and contentOffset of scroll view
-        CGPoint shapePosition = containerView.center;
+        CGPoint shapePosition = self.containerView.center;
         
         CAShapeLayer *circleShape = [CAShapeLayer layer];
         circleShape.path = path.CGPath;
@@ -124,7 +142,7 @@
         circleShape.strokeColor = stroke.CGColor;
         circleShape.lineWidth = 1;
         
-        [containerView.layer addSublayer:circleShape];
+        [self.containerView.layer addSublayer:circleShape];
         
         
         [CATransaction begin];
@@ -149,21 +167,21 @@
         
         [CATransaction commit];
     }
-    gesture.enabled = NO;
+    self.gesture.enabled = NO;
     [UIView animateWithDuration:0.2 animations:^{
         if(isAction) {
-            imageView.transform = CGAffineTransformMakeScale(1.15, 1.15);
+            self.imageView.transform = CGAffineTransformMakeScale(1.15, 1.15);
         }
         
     }completion:^(BOOL finished) {
         [UIView animateWithDuration:0.1 animations:^{
-            gesture.enabled = YES;
+            self.gesture.enabled = YES;
             if(isAction) {
-                imageView.transform = CGAffineTransformMakeScale(1, 1);
+                self.imageView.transform = CGAffineTransformMakeScale(1, 1);
             }
         }completion:^(BOOL finished) {
-            if(isAction && [superSender respondsToSelector:methodName]){
-                [superSender performSelectorOnMainThread:methodName withObject:nil waitUntilDone:NO];
+            if(isAction && [self.superSender respondsToSelector:self.methodName]){
+                [self.superSender performSelectorOnMainThread:self.methodName withObject:nil waitUntilDone:NO];
             }
             
             if(_block && isAction) {
@@ -175,6 +193,19 @@
     }];
 }
 
+
+#pragma mark - Getter
+- (UIImageView *)imageView {
+    if(!_imageView) {
+        _imageView = [[UIImageView alloc]initWithImage:self.image];
+        _imageView.frame = self.bounds;
+        _imageView.layer.borderColor = [UIColor whiteColor].CGColor;
+        _imageView.layer.borderWidth = 3;
+        _imageView.layer.cornerRadius = self.imageView.frame.size.height/2;
+        _imageView.layer.masksToBounds = YES;
+    }
+    return _imageView;
+}
 
 
 @end

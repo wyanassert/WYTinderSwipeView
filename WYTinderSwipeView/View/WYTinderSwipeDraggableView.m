@@ -1,15 +1,14 @@
 //
-//  DraggableView.m
-//  RKSwipeCards
+//  WYTinderSwipeDraggableView.m
+//  Neon
 //
-//  Created by Richard Kim on 5/21/14.
-//  Copyright (c) 2014 Richard Kim. All rights reserved.
+//  Created by wyan assert on 2017/11/14.
+//  Copyright © 2017年 NeonPopular. All rights reserved.
 //
-//  @cwRichardKim for updates and requests
 
 #define ACTION_MARGIN               100
 #define SCALE_STRENGTH              4
-#define SCALE_MAX                   .93
+#define SCALE_MAX                   0.93
 #define ROTATION_MAX                1
 #define ROTATION_STRENGTH           320
 #define ROTATION_ANGLE              M_PI/8
@@ -17,13 +16,17 @@
 
 #import "WYTinderSwipeDraggableView.h"
 
-@implementation WYTinderSwipeDraggableView {
-    CGFloat xFromCenter;
-    CGFloat yFromCenter;
-}
+@interface WYTinderSwipeDraggableView()
+
+@property (nonatomic, assign) CGFloat xFromCenter;
+@property (nonatomic, assign) CGFloat yFromCenter;
+
+@end
+
+
+@implementation WYTinderSwipeDraggableView
 
 @synthesize delegate;
-
 @synthesize panGestureRecognizer;
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -46,8 +49,8 @@
 }
 
 - (void)beingDragged:(UIPanGestureRecognizer *)gestureRecognizer {
-    xFromCenter = [gestureRecognizer translationInView:self].x;
-    yFromCenter = [gestureRecognizer translationInView:self].y;
+    self.xFromCenter = [gestureRecognizer translationInView:self].x;
+    self.yFromCenter = [gestureRecognizer translationInView:self].y;
     
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:{
@@ -55,10 +58,10 @@
             break;
         };
         case UIGestureRecognizerStateChanged:{
-            CGFloat rotationStrength = MIN(xFromCenter / ROTATION_STRENGTH, ROTATION_MAX);
+            CGFloat rotationStrength = MIN(self.xFromCenter / ROTATION_STRENGTH, ROTATION_MAX);
             CGFloat rotationAngel = (CGFloat) (ROTATION_ANGLE * rotationStrength);
             CGFloat scale = MAX(1 - fabs(rotationStrength) / SCALE_STRENGTH, SCALE_MAX);
-            self.center = CGPointMake(self.originalPoint.x + xFromCenter, self.originalPoint.y + yFromCenter);
+            self.center = CGPointMake(self.originalPoint.x + self.xFromCenter, self.originalPoint.y + self.yFromCenter);
             CGAffineTransform transform = CGAffineTransformMakeRotation(rotationAngel);
             CGAffineTransform scaleTransform = CGAffineTransformScale(transform, scale, scale);
             self.transform = scaleTransform;
@@ -75,12 +78,12 @@
 }
 
 - (void)afterSwipeAction {
-    if (xFromCenter > ACTION_MARGIN) {
+    if (self.xFromCenter > ACTION_MARGIN) {
         [self rightAction];
-        xFromCenter = 0;
-    } else if (xFromCenter < -ACTION_MARGIN) {
+        self.xFromCenter = 0;
+    } else if (self.xFromCenter < -ACTION_MARGIN) {
         [self leftAction];
-        xFromCenter = 0;
+        self.xFromCenter = 0;
     } else {
         [UIView animateWithDuration:DismissAnimationInterval
                               delay:0
@@ -97,7 +100,7 @@
 }
 
 - (void)rightAction {
-    CGPoint finishPoint = CGPointMake(500, 2*yFromCenter +self.originalPoint.y);
+    CGPoint finishPoint = CGPointMake(500, 2*self.yFromCenter +self.originalPoint.y);
     [UIView animateWithDuration:DismissAnimationInterval
                      animations:^{
                          self.center = finishPoint;
@@ -108,7 +111,7 @@
 }
 
 - (void)leftAction {
-    CGPoint finishPoint = CGPointMake(-500, 2*yFromCenter +self.originalPoint.y);
+    CGPoint finishPoint = CGPointMake(-500, 2*self.yFromCenter +self.originalPoint.y);
     [UIView animateWithDuration:DismissAnimationInterval
                      animations:^{
                          self.center = finishPoint;

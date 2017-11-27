@@ -1,43 +1,27 @@
 //
-//  BTRippleButtton.h
-//  BTSimpleRippleButton
+//  WYTinderSwipeRippleButtton.h
+//  Neon
 //
-//  Created by Balram Tiwari on 01/06/14.
-//  Copyright (c) 2014 Balram. All rights reserved.
+//  Created by wyan assert on 2017/11/14.
+//  Copyright © 2017年 NeonPopular. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-typedef void (^completion)(BOOL success);
+typedef void (^WYTinderSwipeRippleButttonCompletion)(BOOL success);
 
-@interface WYTinderSwipeRippleButtton : UIView{
-    @private
-    UIImageView *imageView;
-    UILabel *title;
-    UITapGestureRecognizer *gesture;
-    SEL methodName;
-    id superSender;
-    UIColor *rippleColor;
-    UIColor *rippleBGColor;
-    NSArray *rippleColors;
-    UIView *containerView;
-    BOOL isRippleOn;
-    BOOL isNextDismiss;
-}
+@interface WYTinderSwipeRippleButtton : UIView
 
-@property (nonatomic, copy) completion block;
+@property (nonatomic, copy) WYTinderSwipeRippleButttonCompletion block;
 
 - (instancetype)initWithImage:(UIImage *)image andFrame:(CGRect)frame andTarget:(SEL)action andID:(id)sender;
-
-- (instancetype)initWithImage:(UIImage *)image andFrame:(CGRect)frame onCompletion:(completion)completionBlock;
+- (instancetype)initWithImage:(UIImage *)image andFrame:(CGRect)frame onCompletion:(WYTinderSwipeRippleButttonCompletion)completionBlock;
 
 - (void)loadImage:(UIImage *)image;
-
 - (void)triggleAnimation;
 
 - (void)setRippleEffectWithColor:(UIColor *)color;
 - (void)setRippleEffectWithBGColor:(UIColor *)color;
-
 - (void)setRippeEffectEnabled:(BOOL)setRippeEffectEnabled;
 
 @end
