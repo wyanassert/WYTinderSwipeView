@@ -1,17 +1,23 @@
 //
-//  DraggableViewBackground.m
-//  RKSwipeCards
+//  WYTinderSwipeView.h
+//  Neon
 //
-//  Created by Richard Kim on 8/23/14.
-//  Copyright (c) 2014 Richard Kim. All rights reserved.
+//  Created by wyan assert on 2017/11/14.
+//  Copyright © 2017年 NeonPopular. All rights reserved.
 //
 
+
 #import "WYTinderSwipeView.h"
+
+#import "WYTinderSwupeHeader.h"
+#import "Masonry.h"
+#import "SDWebImageManager.h"
+#import "NSObject+tsv_Throttle.h"
+
 #import "WYTinderSwipeDisplayViewModel.h"
 #import "WYTinderSwipeDraggableDisplayView.h"
 #import "WYTinderSwipeRippleButtton.h"
 #import "WYTinderSwipeImpactFeedback.h"
-#import "NSObject+tsv_Throttle.h"
 
 
 #define kLoadMoreThreshold 4
@@ -25,9 +31,6 @@
 @property (nonatomic, strong) NSMutableArray<WYTinderSwipeDraggableDisplayView *>   *saveCards;
 @property (nonatomic, assign) NSInteger                                             cardsLoadedIndex;
 @property (nonatomic, strong) UIView                                                *containerView;
-@property (nonatomic, strong) UIButton                                              *checkButton;
-@property (nonatomic, strong) UIButton                                              *xButton;
-@property (nonatomic, strong) UIButton                                              *restoreButton;
 @property (   atomic, assign) BOOL                                                  isLoadingMore;
 @property (nonatomic, strong) WYTinderSwipeRippleButtton                            *loadMoreButton;
 @property (nonatomic, strong) NSTimer                                               *timer;
@@ -37,20 +40,24 @@
 @implementation WYTinderSwipeView
 
 static const int MAX_BUFFER_SIZE = 2;
-static const float CARD_HEIGHT = 480;
-static const float CARD_WIDTH = 340;
+
+- (instancetype)init {
+    if(self = [super init]) {
+        [self commonInit];
+    }
+    return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [super layoutSubviews];
-        [self configView];
-        self.dataArray = [NSMutableArray array];
-        self.loadedCards = [[NSMutableArray alloc] init];
-        self.allCards = [[NSMutableArray alloc] init];
-        self.cardsLoadedIndex = 0;
+        [self commonInit];
     }
     return self;
+}
+
+- (void)commonInit {
+    [self configView];
 }
 
 
@@ -59,12 +66,23 @@ static const float CARD_WIDTH = 340;
     [self loadMoreData];
 }
 
+- (void)loadDisplayAvatar:(NSString *)imageStr {
+    [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:imageStr]
+                                                options:0
+                                               progress:nil
+                                              completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                                                  if(image && !error) {
+                                                      [_loadMoreButton loadImage:image];
+                                                  }
+                                              }];
+}
+
 - (void)swipeToLeft {
-    [self swipeLeft];
+    [self innerSwipeLeft];
 }
 
 - (void)swipeToRight {
-    [self swipeToRight];
+    [self innerSwipeRight];
 }
 
 - (void)cardRestore {
@@ -76,37 +94,13 @@ static const float CARD_WIDTH = 340;
 - (void)configView {
     [self addSubview:self.containerView];
     [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(80);
-        make.width.mas_equalTo(CARD_WIDTH);
-        make.height.mas_equalTo(CARD_HEIGHT);
-        make.centerX.equalTo(self);
+        make.edges.equalTo(self);
     }];
     
     [self.containerView addSubview:self.loadMoreButton];
     [self.loadMoreButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.containerView);
-        make.width.height.mas_equalTo(WTS_SCREENAPPLYHEIGHT(100));
-    }];
-    
-    [self addSubview:self.xButton];
-    [self.xButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.containerView.mas_bottom).offset(WTS_SCREENAPPLYHEIGHT(16));
-        make.left.equalTo(self.containerView);
-        make.width.height.mas_equalTo(WTS_SCREENAPPLYHEIGHT(60));
-    }];
-    
-    [self addSubview:self.checkButton];
-    [self.checkButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.containerView.mas_bottom).offset(WTS_SCREENAPPLYHEIGHT(16));
-        make.right.equalTo(self.containerView);
-        make.width.height.mas_equalTo(WTS_SCREENAPPLYHEIGHT(60));
-    }];
-    
-    [self addSubview:self.restoreButton];
-    [self.restoreButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.containerView.mas_bottom).offset(WTS_SCREENAPPLYHEIGHT(16));
-        make.centerX.equalTo(self.containerView);
-        make.width.height.mas_equalTo(WTS_SCREENAPPLYHEIGHT(60));
+        make.width.height.mas_equalTo(WTS_SCREENAPPLYSPACE(100));
     }];
 }
 
@@ -114,7 +108,7 @@ static const float CARD_WIDTH = 340;
     if(index >= self.dataArray.count) {
         return [WYTinderSwipeDraggableDisplayView new];
     }
-    WYTinderSwipeDraggableDisplayView *draggableView = [[WYTinderSwipeDraggableDisplayView alloc]initWithFrame:CGRectMake(0, 0, CARD_WIDTH, CARD_HEIGHT) info:self.dataArray[index]];
+    WYTinderSwipeDraggableDisplayView *draggableView = [[WYTinderSwipeDraggableDisplayView alloc]initWithFrame:self.bounds info:self.dataArray[index]];
     draggableView.delegate = self;
     return draggableView;
 }
@@ -167,6 +161,16 @@ static const float CARD_WIDTH = 340;
     } else {
         self.isLoadingMore = NO;
     }
+}
+
+- (void)innerSwipeRight {
+    WYTinderSwipeDraggableView *dragView = [self.loadedCards firstObject];
+    [dragView rightClickAction];
+}
+
+- (void)innerSwipeLeft {
+    WYTinderSwipeDraggableView *dragView = [self.loadedCards firstObject];
+    [dragView leftClickAction];
 }
 
 - (void)innerCardRestore {
@@ -289,59 +293,35 @@ static const float CARD_WIDTH = 340;
 }
 
 
-#pragma mark - Action
-- (void)swipeRight {
-    WYTinderSwipeDraggableView *dragView = [self.loadedCards firstObject];
-    [dragView rightClickAction];
-}
-
-- (void)swipeLeft {
-    WYTinderSwipeDraggableView *dragView = [self.loadedCards firstObject];
-    [dragView leftClickAction];
-}
-
-
 #pragma mark - Getter
-- (UIButton *)xButton {
-    if(!_xButton) {
-        _xButton = [[UIButton alloc]initWithFrame:CGRectMake(60, 485, 59, 59)];
-        [_xButton setImage:[UIImage imageNamed:@"xButton"] forState:UIControlStateNormal];
-        [_xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
+- (NSMutableArray<WYTinderSwipeDisplayViewModel *> *)dataArray {
+    if(!_dataArray) {
+        _dataArray = [NSMutableArray array];
     }
-    return _xButton;
+    return _dataArray;
 }
 
-- (UIButton *)checkButton {
-    if(!_checkButton) {
-        _checkButton = [[UIButton alloc]initWithFrame:CGRectMake(200, 485, 59, 59)];
-        [_checkButton setImage:[UIImage imageNamed:@"yesButton"] forState:UIControlStateNormal];
-        [_checkButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
+- (NSMutableArray<WYTinderSwipeDraggableDisplayView *> *)allCards {
+    if(!_allCards) {
+        _allCards = [NSMutableArray array];
     }
-    return _checkButton;
+    return _allCards;
 }
 
-- (UIButton *)restoreButton {
-    if(!_restoreButton) {
-        _restoreButton = [[UIButton alloc]initWithFrame:CGRectMake(200, 485, 59, 59)];
-        [_restoreButton setImage:[UIImage imageNamed:@"restoreImage"] forState:UIControlStateNormal];
-        [_restoreButton addTarget:self action:@selector(cardRestore) forControlEvents:UIControlEventTouchUpInside];
+- (NSMutableArray<WYTinderSwipeDraggableDisplayView *> *)loadedCards {
+    if(!_loadedCards) {
+        _loadedCards = [NSMutableArray array];
     }
-    return _restoreButton;
+    return _loadedCards;
 }
 
 - (WYTinderSwipeRippleButtton *)loadMoreButton {
     if(!_loadMoreButton) {
-        _loadMoreButton = [[WYTinderSwipeRippleButtton alloc] initWithImage:[UIImage imageNamed:@"image_wts_avatar_placehodler"]
-                                                        andFrame:CGRectMake((WTS_SCREEN_WIDTH - WTS_SCREENAPPLYHEIGHT(100)) / 2, (WTS_SCREEN_HEIGHT - WTS_SCREENAPPLYHEIGHT(100)) / 2, WTS_SCREENAPPLYHEIGHT(100), WTS_SCREENAPPLYHEIGHT(100))
-                                                    andTarget:@selector(loadMoreData) andID:self];
-        [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:@""]
-                                                    options:0
-                                                   progress:nil
-                                                  completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                                                      if(image && !error) {
-                                                          [_loadMoreButton loadImage:image];
-                                                      }
-                                                  }];
+        _loadMoreButton = [[WYTinderSwipeRippleButtton alloc]
+                           initWithImage:[UIImage imageNamed:@"image_wts_avatar_placehodler"]
+                           andFrame:CGRectMake(0, 0, WTS_SCREENAPPLYSPACE(100), WTS_SCREENAPPLYSPACE(100))
+                           andTarget:@selector(loadMoreData)
+                           andID:self];
         [_loadMoreButton setRippleEffectWithColor:WTS_UIColorFromRGB(242, 144, 158)];
         [_loadMoreButton setRippleEffectWithBGColor:WTS_UIColorFromRGBA(242, 144, 158, 0.2)];
     }

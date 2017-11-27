@@ -7,4 +7,7 @@ target 'WYTinderSwipeViewDemo' do
 
   # Pods for WYTinderSwipeViewDemo
   pod 'WYTinderSwipeView', :path => '..'
+  
+  pod 'Reveal-SDK', :configurations => ['Debug']
+  
 end

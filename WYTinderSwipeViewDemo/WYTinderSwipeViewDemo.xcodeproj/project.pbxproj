@@ -189,9 +189,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-WYTinderSwipeViewDemo/Pods-WYTinderSwipeViewDemo-frameworks.sh",
+				"${PODS_ROOT}/Reveal-SDK/RevealServer-12/iOS/RevealServer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RevealServer.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -206,6 +209,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-WYTinderSwipeViewDemo/Pods-WYTinderSwipeViewDemo-resources.sh",
 				"${PODS_ROOT}/../../Resource/image_wts_avatar_placehodler.png",
+				"${PODS_ROOT}/../../Resource/image_wts_cover_placehodler.png",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (

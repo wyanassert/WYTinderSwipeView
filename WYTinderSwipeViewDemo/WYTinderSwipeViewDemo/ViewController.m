@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "WYTinderSwipeView.h"
+#import "Masonry.h"
 
 @interface ViewController () <WYTinderSwipeViewDelegate>
 
@@ -19,10 +20,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    WYTinderSwipeView *draggableBackground = [[WYTinderSwipeView alloc]initWithFrame:self.view.frame];
-    [self.view addSubview:draggableBackground];
-    draggableBackground.delegate = self;
-    [draggableBackground startLoadData];
+    WYTinderSwipeView *tinderSwipeView = [[WYTinderSwipeView alloc]init];
+    [self.view addSubview:tinderSwipeView];
+    UIEdgeInsets insets = UIEdgeInsetsMake(80, 20, 100, 20);
+    [tinderSwipeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view).insets(insets);
+    }];
+    tinderSwipeView.delegate = self;
+    [tinderSwipeView startLoadData];
+    [tinderSwipeView loadDisplayAvatar:[self randonImageArray]];
 }
 
 
@@ -44,7 +50,7 @@
             return ;
         }
         NSMutableArray <WYTinderSwipeDisplayViewModel *> *array = [NSMutableArray array];
-        NSUInteger n = 3;
+        NSUInteger n = 10;
         while (n--) {
             WYTinderSwipeDisplayViewModel *model = [[WYTinderSwipeDisplayViewModel alloc] init];
             NSMutableArray<NSString *> *imageArray = [NSMutableArray array];
@@ -75,7 +81,9 @@
                             @"http://pic23.nipic.com/20120919/10612249_113052533161_2.png",
                             @"http://pic.58pic.com/58pic/16/58/28/80M58PICTcs_1024.jpg",
                             @"http://imgsrc.baidu.com/baike/pic/item/8d158aeecb3a7f452df534b6.jpg",
-                            @"http://pic33.photophoto.cn/20141117/0005018343228376_b.jpg"
+                            @"http://pic33.photophoto.cn/20141117/0005018343228376_b.jpg",
+                            @"http://pic.666pic.com/thumbs/2754144/42825695/api_thumb_450.jpg",
+                            @"http://pic.666pic.com/thumbs/1003369/15769179/api_thumb_450.jpg",
                             ];
     return totalArray[arc4random()%totalArray.count];
 }

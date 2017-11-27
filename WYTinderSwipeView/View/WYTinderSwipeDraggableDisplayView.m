@@ -7,6 +7,10 @@
 //
 
 #import "WYTinderSwipeDraggableDisplayView.h"
+
+#import "Masonry.h"
+#import "UIImageView+WebCache.h"
+
 #import "WYTinderSwipeImageIndicatorView.h"
 #import "WYTinderSwipeImpactFeedback.h"
 
@@ -66,7 +70,7 @@
 
 - (void)loadData {
     if(self.displayImageStr.count) {
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.displayImageStr.firstObject] placeholderImage:[UIImage imageNamed:@"image_wts_avatar_placehodler"]];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.displayImageStr.firstObject] placeholderImage:[UIImage imageNamed:@"image_wts_cover_placehodler"]];
     }
 }
 
@@ -76,7 +80,7 @@
     if(self.currentImageIndex > 0) {
         self.currentImageIndex --;
         self.indicatorView.currentIndex = self.currentImageIndex;
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.displayImageStr[self.currentImageIndex]] placeholderImage:[UIImage imageNamed:@"image_wts_avatar_placehodler"]];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.displayImageStr[self.currentImageIndex]] placeholderImage:[UIImage imageNamed:@"image_wts_cover_placehodler"]];
         [WYTinderSwipeImpactFeedback prepareForImpactFeedback:WTSImpactFeedbackTypeLight];
     } else {
         if(self.delegate && [self.delegate respondsToSelector:@selector(didClickLeftSideAndWaitToShake)]) {
@@ -89,7 +93,7 @@
     if(self.currentImageIndex < self.displayImageStr.count - 1) {
         self.currentImageIndex ++;
         self.indicatorView.currentIndex = self.currentImageIndex;
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.displayImageStr[self.currentImageIndex]] placeholderImage:[UIImage imageNamed:@"image_wts_avatar_placehodler"]];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.displayImageStr[self.currentImageIndex]] placeholderImage:[UIImage imageNamed:@"image_wts_cover_placehodler"]];
         [WYTinderSwipeImpactFeedback prepareForImpactFeedback:WTSImpactFeedbackTypeLight];
     } else {
         if(self.delegate && [self.delegate respondsToSelector:@selector(didClickRightSideAndWaitToShake)]) {
@@ -105,6 +109,7 @@
         _imageView = [[UIImageView alloc] init];
         _imageView.layer.cornerRadius = 3;
         _imageView.layer.masksToBounds = YES;
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _imageView;
 }
