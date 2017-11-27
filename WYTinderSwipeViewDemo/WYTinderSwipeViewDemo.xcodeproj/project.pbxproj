@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C2BD6C54347D4EAB77E328D /* libPods-WYTinderSwipeViewDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3896A42B8F2722CCD2D11724 /* libPods-WYTinderSwipeViewDemo.a */; };
 		93A096111FCBB62E00B2DAA7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A096101FCBB62E00B2DAA7 /* AppDelegate.m */; };
 		93A096141FCBB62E00B2DAA7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A096131FCBB62E00B2DAA7 /* ViewController.m */; };
 		93A096171FCBB62E00B2DAA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93A096151FCBB62E00B2DAA7 /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3896A42B8F2722CCD2D11724 /* libPods-WYTinderSwipeViewDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WYTinderSwipeViewDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93A0960C1FCBB62D00B2DAA7 /* WYTinderSwipeViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WYTinderSwipeViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93A0960F1FCBB62D00B2DAA7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		93A096101FCBB62E00B2DAA7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -26,6 +28,8 @@
 		93A0961B1FCBB62E00B2DAA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		93A0961D1FCBB62E00B2DAA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93A0961E1FCBB62E00B2DAA7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E1D68EDDE653945E44DEC087 /* Pods-WYTinderSwipeViewDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYTinderSwipeViewDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-WYTinderSwipeViewDemo/Pods-WYTinderSwipeViewDemo.release.xcconfig"; sourceTree = "<group>"; };
+		F6A7EC3FE5E2429D04CFB4A4 /* Pods-WYTinderSwipeViewDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYTinderSwipeViewDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYTinderSwipeViewDemo/Pods-WYTinderSwipeViewDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C2BD6C54347D4EAB77E328D /* libPods-WYTinderSwipeViewDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +49,8 @@
 			children = (
 				93A0960E1FCBB62D00B2DAA7 /* WYTinderSwipeViewDemo */,
 				93A0960D1FCBB62D00B2DAA7 /* Products */,
+				94F0CBAC4053200B11AA77C6 /* Pods */,
+				F3D58260DE361B7B28E10779 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +78,23 @@
 			path = WYTinderSwipeViewDemo;
 			sourceTree = "<group>";
 		};
+		94F0CBAC4053200B11AA77C6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F6A7EC3FE5E2429D04CFB4A4 /* Pods-WYTinderSwipeViewDemo.debug.xcconfig */,
+				E1D68EDDE653945E44DEC087 /* Pods-WYTinderSwipeViewDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		F3D58260DE361B7B28E10779 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3896A42B8F2722CCD2D11724 /* libPods-WYTinderSwipeViewDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -78,9 +102,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 93A096221FCBB62E00B2DAA7 /* Build configuration list for PBXNativeTarget "WYTinderSwipeViewDemo" */;
 			buildPhases = (
+				13FA318F22F6B87A81AADC28 /* [CP] Check Pods Manifest.lock */,
 				93A096081FCBB62D00B2DAA7 /* Sources */,
 				93A096091FCBB62D00B2DAA7 /* Frameworks */,
 				93A0960A1FCBB62D00B2DAA7 /* Resources */,
+				1D4D7C21053A7BC4D2C78C70 /* [CP] Embed Pods Frameworks */,
+				6E919432DA4BDA595B3D0A1A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -136,6 +163,57 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		13FA318F22F6B87A81AADC28 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WYTinderSwipeViewDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1D4D7C21053A7BC4D2C78C70 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WYTinderSwipeViewDemo/Pods-WYTinderSwipeViewDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E919432DA4BDA595B3D0A1A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WYTinderSwipeViewDemo/Pods-WYTinderSwipeViewDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		93A096081FCBB62D00B2DAA7 /* Sources */ = {
@@ -276,6 +354,7 @@
 		};
 		93A096231FCBB62E00B2DAA7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6A7EC3FE5E2429D04CFB4A4 /* Pods-WYTinderSwipeViewDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -291,6 +370,7 @@
 		};
 		93A096241FCBB62E00B2DAA7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1D68EDDE653945E44DEC087 /* Pods-WYTinderSwipeViewDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
