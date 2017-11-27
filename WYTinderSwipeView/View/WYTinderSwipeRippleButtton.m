@@ -7,7 +7,6 @@
 //
 #import <QuartzCore/QuartzCore.h>
 #import "WYTinderSwipeRippleButtton.h"
-#import "Masonry.h"
 
 @implementation WYTinderSwipeRippleButtton
 

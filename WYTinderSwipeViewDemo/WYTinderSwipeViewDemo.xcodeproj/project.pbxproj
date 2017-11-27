@@ -204,9 +204,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-WYTinderSwipeViewDemo/Pods-WYTinderSwipeViewDemo-resources.sh",
+				"${PODS_ROOT}/../../Resource/image_wts_avatar_placehodler.png",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

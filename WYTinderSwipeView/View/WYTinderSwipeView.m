@@ -7,16 +7,12 @@
 //
 
 #import "WYTinderSwipeView.h"
-
-#import "Masonry.h"
-#import "SDWebImageManager.h"
-
 #import "WYTinderSwipeDisplayViewModel.h"
 #import "WYTinderSwipeDraggableDisplayView.h"
 #import "WYTinderSwipeRippleButtton.h"
 #import "WYTinderSwipeImpactFeedback.h"
 #import "NSObject+tsv_Throttle.h"
-#import "WYTinderSwupeHeader.h"
+
 
 #define kLoadMoreThreshold 4
 #define kLoadMaxRestoreNumber 50
@@ -61,6 +57,14 @@ static const float CARD_WIDTH = 340;
 #pragma mark - Public
 - (void)startLoadData {
     [self loadMoreData];
+}
+
+- (void)swipeToLeft {
+    [self swipeLeft];
+}
+
+- (void)swipeToRight {
+    [self swipeToRight];
 }
 
 - (void)cardRestore {
@@ -327,7 +331,7 @@ static const float CARD_WIDTH = 340;
 
 - (WYTinderSwipeRippleButtton *)loadMoreButton {
     if(!_loadMoreButton) {
-        _loadMoreButton = [[WYTinderSwipeRippleButtton alloc] initWithImage:[UIImage imageNamed:@"neon_broadcast_avatar_placehodler"]
+        _loadMoreButton = [[WYTinderSwipeRippleButtton alloc] initWithImage:[UIImage imageNamed:@"image_wts_avatar_placehodler"]
                                                         andFrame:CGRectMake((WTS_SCREEN_WIDTH - WTS_SCREENAPPLYHEIGHT(100)) / 2, (WTS_SCREEN_HEIGHT - WTS_SCREENAPPLYHEIGHT(100)) / 2, WTS_SCREENAPPLYHEIGHT(100), WTS_SCREENAPPLYHEIGHT(100))
                                                     andTarget:@selector(loadMoreData) andID:self];
         [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:@""]

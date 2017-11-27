@@ -16,7 +16,6 @@
 #define DismissAnimationInterval    0.2
 
 #import "WYTinderSwipeDraggableView.h"
-#import "Masonry.h"
 
 @implementation WYTinderSwipeDraggableView {
     CGFloat xFromCenter;

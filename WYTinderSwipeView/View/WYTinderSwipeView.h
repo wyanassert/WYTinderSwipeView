@@ -35,11 +35,11 @@
 
 @class WYTinderSwipeDisplayViewModel;
 
-typedef void(^DraggableViewLoadMoreBlock)(NSArray<WYTinderSwipeDisplayViewModel *> *array);
+typedef void(^WTSDraggableViewLoadMoreBlock)(NSArray<WYTinderSwipeDisplayViewModel *> *array);
 
 @protocol WYTinderSwipeViewDelegate<NSObject>
 
-- (BOOL)loadMoreDataInsideSwipeViewWithCompletion:(DraggableViewLoadMoreBlock)block;
+- (BOOL)loadMoreDataInsideSwipeViewWithCompletion:(WTSDraggableViewLoadMoreBlock)block;
 
 @end
 
@@ -48,8 +48,8 @@ typedef void(^DraggableViewLoadMoreBlock)(NSArray<WYTinderSwipeDisplayViewModel 
 @property (nonatomic, assign) id<WYTinderSwipeViewDelegate>         delegate;
 
 - (void)startLoadData;
-- (void)cardSwipedLeft:(UIView *)card;
-- (void)cardSwipedRight:(UIView *)card;
-- (void)cardRestore;
 
+- (void)swipeToLeft;
+- (void)swipeToRight;
+- (void)cardRestore;
 @end

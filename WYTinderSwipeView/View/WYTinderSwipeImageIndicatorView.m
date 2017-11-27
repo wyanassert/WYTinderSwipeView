@@ -7,7 +7,6 @@
 //
 
 #import "WYTinderSwipeImageIndicatorView.h"
-#import "Masonry.h"
 
 #define kLightColor [UIColor whiteColor]
 #define kDarkColor  [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2]

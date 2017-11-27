@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
 
   s.source_files  = "WYTinderSwipeView", "WYTinderSwipeView/**/*.{h,m}"
   s.public_header_files = "WYTinderSwipeView/**/*.h"
-  # s.resources = "Resources/*.png"
+  s.resources = "Resource/*.png"
 
   # s.requires_arc = true
   s.dependency "Masonry"
