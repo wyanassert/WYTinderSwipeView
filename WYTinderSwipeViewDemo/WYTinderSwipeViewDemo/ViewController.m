@@ -12,6 +12,11 @@
 
 @interface ViewController () <WYTinderSwipeViewDelegate>
 
+@property (nonatomic, strong) WYTinderSwipeView         *tinderSwipeView;
+@property (nonatomic, strong) UIButton                  *checkButton;
+@property (nonatomic, strong) UIButton                  *xButton;
+@property (nonatomic, strong) UIButton                  *restoreButton;
+
 @end
 
 @implementation ViewController
@@ -20,15 +25,34 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    WYTinderSwipeView *tinderSwipeView = [[WYTinderSwipeView alloc]init];
-    [self.view addSubview:tinderSwipeView];
-    UIEdgeInsets insets = UIEdgeInsetsMake(80, 20, 100, 20);
-    [tinderSwipeView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.tinderSwipeView];
+    UIEdgeInsets insets = UIEdgeInsetsMake(80, 20, 150, 20);
+    [self.tinderSwipeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view).insets(insets);
     }];
-    tinderSwipeView.delegate = self;
-    [tinderSwipeView startLoadData];
-    [tinderSwipeView loadDisplayAvatar:[self randonImageArray]];
+    [self.tinderSwipeView startLoadData];
+    [self.tinderSwipeView loadDisplayAvatar:[self randonImageArray]];
+    
+    [self.view addSubview:self.xButton];
+    [self.xButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.tinderSwipeView);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-50);
+        make.width.height.mas_equalTo(80);
+    }];
+    
+    [self.view addSubview:self.checkButton];
+    [self.checkButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.tinderSwipeView);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-50);
+        make.width.height.mas_equalTo(80);
+    }];
+    
+    [self.view addSubview:self.restoreButton];
+    [self.restoreButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.tinderSwipeView);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-50);
+        make.width.height.mas_equalTo(80);
+    }];
 }
 
 
@@ -50,7 +74,7 @@
             return ;
         }
         NSMutableArray <WYTinderSwipeDisplayViewModel *> *array = [NSMutableArray array];
-        NSUInteger n = 10;
+        NSUInteger n = 3;
         while (n--) {
             WYTinderSwipeDisplayViewModel *model = [[WYTinderSwipeDisplayViewModel alloc] init];
             NSMutableArray<NSString *> *imageArray = [NSMutableArray array];
@@ -85,8 +109,59 @@
                             @"http://pic.666pic.com/thumbs/2754144/42825695/api_thumb_450.jpg",
                             @"http://pic.666pic.com/thumbs/1003369/15769179/api_thumb_450.jpg",
                             ];
-    return totalArray[arc4random()%totalArray.count];
+    static NSUInteger index = 0;
+    return totalArray[index++%totalArray.count];
 }
 
+
+#pragma mark - Action
+- (void)swipeLeft {
+    [self.tinderSwipeView swipeToLeft];
+}
+
+- (void)swipeRight {
+    [self.tinderSwipeView swipeToRight];
+}
+
+- (void)cardRestore {
+    [self.tinderSwipeView cardRestore];
+}
+
+
+#pragma mark - Getter
+- (WYTinderSwipeView *)tinderSwipeView {
+    if(!_tinderSwipeView) {
+        _tinderSwipeView = [[WYTinderSwipeView alloc] init];
+        _tinderSwipeView.delegate = self;
+    }
+    return _tinderSwipeView;
+}
+
+- (UIButton *)xButton {
+    if(!_xButton) {
+        _xButton = [[UIButton alloc] init];
+        [_xButton setImage:[UIImage imageNamed:@"xButton"] forState:UIControlStateNormal];
+        [_xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _xButton;
+}
+
+- (UIButton *)checkButton {
+    if(!_checkButton) {
+        _checkButton = [[UIButton alloc] init];
+        [_checkButton setImage:[UIImage imageNamed:@"yesButton"] forState:UIControlStateNormal];
+        [_checkButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _checkButton;
+}
+
+- (UIButton *)restoreButton {
+    if(!_restoreButton) {
+        _restoreButton = [[UIButton alloc] init];
+        [_restoreButton setImage:[UIImage imageNamed:@"restoreImage"] forState:UIControlStateNormal];
+        [_restoreButton addTarget:self action:@selector(cardRestore) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _restoreButton;
+}
 
 @end

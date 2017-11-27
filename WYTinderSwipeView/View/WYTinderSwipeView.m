@@ -122,36 +122,38 @@ static const int MAX_BUFFER_SIZE = 2;
     if(self.delegate && [self.delegate respondsToSelector:@selector(loadMoreDataInsideSwipeViewWithCompletion:)]) {
         __weak typeof(self)weakSelf = self;
         BOOL isMore = [self.delegate loadMoreDataInsideSwipeViewWithCompletion:^(NSArray<WYTinderSwipeDisplayViewModel *> *array) {
-            __strong typeof(weakSelf)self = weakSelf;
-            self.isLoadingMore = NO;
-            if(array.count) {
-                [self invalidateTimer];
-                [self.loadMoreButton setRippeEffectEnabled:NO];
-                NSUInteger oldDataCount = self.dataArray.count;
-                [self.dataArray addObjectsFromArray:array];
-                
-                NSInteger numLoadedCardsCap = MIN(MAX_BUFFER_SIZE, [self.dataArray count]);
-                
-                NSMutableArray<WYTinderSwipeDraggableDisplayView *> *tmpCardsArray = [NSMutableArray array];
-                for(NSUInteger i = oldDataCount; i < self.dataArray.count; i++) {
-                    WYTinderSwipeDraggableDisplayView* newCard = [self createDraggableViewWithDataAtIndex:i];
-                    [tmpCardsArray addObject:newCard];
+            dispatch_main_async_safe(^ {
+                __strong typeof(weakSelf)self = weakSelf;
+                self.isLoadingMore = NO;
+                if(array.count) {
+                    [self invalidateTimer];
+                    [self.loadMoreButton setRippeEffectEnabled:NO];
+                    NSUInteger oldDataCount = self.dataArray.count;
+                    [self.dataArray addObjectsFromArray:array];
                     
-                    if(i < numLoadedCardsCap) {
-                        [self.loadedCards addObject:newCard];
+                    NSInteger numLoadedCardsCap = MIN(MAX_BUFFER_SIZE, [self.dataArray count]);
+                    
+                    NSMutableArray<WYTinderSwipeDraggableDisplayView *> *tmpCardsArray = [NSMutableArray array];
+                    for(NSUInteger i = oldDataCount; i < self.dataArray.count; i++) {
+                        WYTinderSwipeDraggableDisplayView* newCard = [self createDraggableViewWithDataAtIndex:i];
+                        [tmpCardsArray addObject:newCard];
+                        
+                        if(i < numLoadedCardsCap) {
+                            [self.loadedCards addObject:newCard];
+                        }
+                    }
+                    [self.allCards addObjectsFromArray:tmpCardsArray];
+                    
+                    for (NSUInteger i = oldDataCount; i < [self.loadedCards count]; i++) {
+                        if (i > 0) {
+                            [self.containerView insertSubview:[self.loadedCards objectAtIndex:i] belowSubview:[self.loadedCards objectAtIndex:i-1]];
+                        } else {
+                            [self.containerView addSubview:[self.loadedCards objectAtIndex:i]];
+                        }
+                        self.cardsLoadedIndex++;
                     }
                 }
-                [self.allCards addObjectsFromArray:tmpCardsArray];
-                
-                for (NSUInteger i = oldDataCount; i < [self.loadedCards count]; i++) {
-                    if (i > 0) {
-                        [self.containerView insertSubview:[self.loadedCards objectAtIndex:i] belowSubview:[self.loadedCards objectAtIndex:i-1]];
-                    } else {
-                        [self.containerView addSubview:[self.loadedCards objectAtIndex:i]];
-                    }
-                    self.cardsLoadedIndex++;
-                }
-            }
+            });
         }];
         if(isMore) {
             
