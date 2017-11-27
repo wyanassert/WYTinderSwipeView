@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios
   s.platform     = :ios, "9.0"
 
-  s.source       = { :git => "https://github.com/wyanassert/WYTinderSwipeView", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/wyanassert/WYTinderSwipeView.git", :tag => "#{s.version}" }
 
   s.source_files  = "WYTinderSwipeView", "WYTinderSwipeView/**/*.{h,m}"
   s.public_header_files = "WYTinderSwipeView/**/*.h"
