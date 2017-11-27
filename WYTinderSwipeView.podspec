@@ -30,6 +30,8 @@ Pod::Spec.new do |s|
   # s.resources = "Resources/*.png"
 
   # s.requires_arc = true
-  s.dependency "Masonry", "~> 1.1.0"
+  s.dependency "Masonry"
+  s.dependency "SDWebImage"
+
 
 end
