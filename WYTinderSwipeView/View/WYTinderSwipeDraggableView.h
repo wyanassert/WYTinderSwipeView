@@ -13,17 +13,20 @@
 - (void)cardSwipedLeft:(UIView *)card;
 - (void)cardSwipedRight:(UIView *)card;
 
+- (void)cardDidMoveWithTranslation:(CGPoint)translation;
+- (void)cardDidMoveAway;
+- (void)cardDidMoveBack;
+
 @end
 
 @interface WYTinderSwipeDraggableView : UIView
 
 @property (weak) id <WYTinderSwipeDraggableViewDelegate> delegate;
 
-@property (nonatomic, strong)UIPanGestureRecognizer *panGestureRecognizer;
-@property (nonatomic)CGPoint originalPoint;
-
 - (void)leftClickAction;
 - (void)rightClickAction;
-- (void)afterSwipeAction;
+- (void)restoreAction;
+
+- (void)adjustTransformScale:(CGFloat)scale;
 
 @end

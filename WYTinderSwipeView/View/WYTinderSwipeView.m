@@ -146,8 +146,10 @@ static const int MAX_BUFFER_SIZE = 2;
                     
                     for (NSUInteger i = oldDataCount; i < [self.loadedCards count]; i++) {
                         if (i > 0) {
+                            [[self.loadedCards objectAtIndex:i] adjustTransformScale:WTS_Scale_Min];
                             [self.containerView insertSubview:[self.loadedCards objectAtIndex:i] belowSubview:[self.loadedCards objectAtIndex:i-1]];
                         } else {
+                            [[self.loadedCards objectAtIndex:i] adjustTransformScale:WTS_Scale_Normal];
                             [self.containerView addSubview:[self.loadedCards objectAtIndex:i]];
                         }
                         self.cardsLoadedIndex++;
@@ -186,7 +188,7 @@ static const int MAX_BUFFER_SIZE = 2;
 - (void)addDataOnTop:(WYTinderSwipeDraggableDisplayView *)view {
     [self.containerView addSubview:view];
     self.cardsLoadedIndex++;
-    [view afterSwipeAction];
+    [view restoreAction];
     
     if(view.displayViewModel) {
         [self.dataArray insertObject:view.displayViewModel atIndex:0];
@@ -273,6 +275,7 @@ static const int MAX_BUFFER_SIZE = 2;
     if (self.cardsLoadedIndex < [self.allCards count] && self.cardsLoadedIndex < MAX_BUFFER_SIZE) {
         [self.loadedCards addObject:[self.allCards objectAtIndex:self.cardsLoadedIndex]];
         self.cardsLoadedIndex++;
+        [[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] adjustTransformScale:WTS_Scale_Min];
         [self.containerView insertSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
     }
 }
@@ -282,7 +285,38 @@ static const int MAX_BUFFER_SIZE = 2;
     if (self.cardsLoadedIndex < [self.allCards count]) {
         [self.loadedCards addObject:[self.allCards objectAtIndex:self.cardsLoadedIndex]];
         self.cardsLoadedIndex++;
+        [[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] adjustTransformScale:WTS_Scale_Min];
         [self.containerView insertSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
+    }
+}
+
+- (void)cardDidMoveWithTranslation:(CGPoint)translation {
+    if(self.loadedCards.count > 1) {
+        CGFloat distance = sqrt(translation.x * translation.x + translation.y * translation.y);
+        CGFloat scale = WTS_Scale_Min + (WTS_Scale_Normal - WTS_Scale_Min) * distance / WTS_ACTION_MARGIN;
+        [[self.loadedCards objectAtIndex:1] adjustTransformScale:scale];
+    }
+}
+
+- (void)cardDidMoveAway {
+    if(self.loadedCards.count > 1) {
+        [UIView animateWithDuration:DismissAnimationInterval
+                         animations:^{
+                             [[self.loadedCards objectAtIndex:1] adjustTransformScale:WTS_Scale_Normal];
+                         }completion:^(BOOL complete){
+                             
+                         }];
+    }
+}
+
+- (void)cardDidMoveBack {
+    if(self.loadedCards.count > 0) {
+        [UIView animateWithDuration:DismissAnimationInterval
+                         animations:^{
+                             [[self.loadedCards firstObject] adjustTransformScale:WTS_Scale_Min];
+                         }completion:^(BOOL complete){
+                             
+                         }];
     }
 }
 

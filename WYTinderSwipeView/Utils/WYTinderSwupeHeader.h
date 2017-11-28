@@ -8,6 +8,18 @@
 #ifndef WYTinderSwupeHeader_h
 #define WYTinderSwupeHeader_h
 
+#define WTS_Scale_Min 0.9
+#define WTS_Scale_Normal 1.0
+
+#define WTS_ACTION_MARGIN               60
+#define WTS_SCALE_STRENGTH              4
+#define WTS_SCALE_MAX                   0.93
+#define WTS_ROTATION_MAX                1
+#define WTS_ROTATION_STRENGTH           320
+#define WTS_ROTATION_ANGLE              M_PI/8
+
+#define DismissAnimationInterval        0.2
+
 #define WTS_SCREEN_WIDTH [[UIScreen mainScreen] bounds].size.width
 #define WTS_SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
 

@@ -84,7 +84,6 @@
     self = [super initWithFrame:frame];
     
     if(self){
-        
         [self commonInitWithImage:image andFrame:frame];
         self.block = completionBlock;
     }

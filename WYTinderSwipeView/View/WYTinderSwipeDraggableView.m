@@ -6,21 +6,16 @@
 //  Copyright © 2017年 NeonPopular. All rights reserved.
 //
 
-#define WTS_ACTION_MARGIN               100
-#define WTS_SCALE_STRENGTH              4
-#define WTS_SCALE_MAX                   0.93
-#define WTS_ROTATION_MAX                1
-#define WTS_ROTATION_STRENGTH           320
-#define WTS_ROTATION_ANGLE              M_PI/8
-
-#define DismissAnimationInterval        0.2
-
 #import "WYTinderSwipeDraggableView.h"
+#import "WYTinderSwupeHeader.h"
 
 @interface WYTinderSwipeDraggableView()
 
-@property (nonatomic, assign) CGFloat xFromCenter;
-@property (nonatomic, assign) CGFloat yFromCenter;
+@property (nonatomic, assign) CGFloat                xFromCenter;
+@property (nonatomic, assign) CGFloat                yFromCenter;
+
+@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+@property (nonatomic, assign) CGPoint                originalPoint;
 
 @end
 
@@ -62,6 +57,56 @@
 }
 
 
+#pragma mark - Public
+- (void)rightClickAction {
+    if(self.delegate && [self.delegate respondsToSelector:@selector(cardDidMoveAway)]) {
+        [self.delegate cardDidMoveAway];
+    }
+    
+    CGPoint finishPoint = CGPointMake(600, self.center.y);
+    [UIView animateWithDuration:DismissAnimationInterval
+                     animations:^{
+                         self.center = finishPoint;
+                         self.transform = CGAffineTransformMakeRotation(1);
+                     }completion:^(BOOL complete){
+                         [self removeFromSuperview];
+                     }];
+    [delegate cardSwipedRight:self];
+}
+
+- (void)leftClickAction {
+    if(self.delegate && [self.delegate respondsToSelector:@selector(cardDidMoveAway)]) {
+        [self.delegate cardDidMoveAway];
+    }
+    
+    CGPoint finishPoint = CGPointMake(-600, self.center.y);
+    [UIView animateWithDuration:DismissAnimationInterval
+                     animations:^{
+                         self.center = finishPoint;
+                         self.transform = CGAffineTransformMakeRotation(-1);
+                     }completion:^(BOOL complete){
+                         [self removeFromSuperview];
+                     }];
+    [delegate cardSwipedLeft:self];
+}
+
+- (void)restoreAction {
+    if(self.delegate && [self.delegate respondsToSelector:@selector(cardDidMoveBack)]) {
+        [self.delegate cardDidMoveBack];
+    }
+    
+    [self afterSwipeAction];
+}
+
+- (void)adjustTransformScale:(CGFloat)scale {
+    scale = MAX(scale, WTS_Scale_Min);
+    scale = MIN(scale, WTS_Scale_Normal);
+    CGAffineTransform identity = CGAffineTransformIdentity;
+    CGAffineTransform transform = CGAffineTransformScale(identity, scale, scale);
+    self.transform = transform;
+}
+
+
 #pragma mark - Action
 - (void)beingDragged:(UIPanGestureRecognizer *)gestureRecognizer {
     self.xFromCenter = [gestureRecognizer translationInView:self].x;
@@ -80,6 +125,9 @@
             CGAffineTransform transform = CGAffineTransformMakeRotation(rotationAngel);
             CGAffineTransform scaleTransform = CGAffineTransformScale(transform, scale, scale);
             self.transform = scaleTransform;
+            if(self.delegate && [self.delegate respondsToSelector:@selector(cardDidMoveWithTranslation:)]) {
+                [self.delegate cardDidMoveWithTranslation:[gestureRecognizer translationInView:self]];
+            }
             
             break;
         };
@@ -130,30 +178,6 @@
     [UIView animateWithDuration:DismissAnimationInterval
                      animations:^{
                          self.center = finishPoint;
-                     }completion:^(BOOL complete){
-                         [self removeFromSuperview];
-                     }];
-    [delegate cardSwipedLeft:self];
-}
-
-- (void)rightClickAction {
-    CGPoint finishPoint = CGPointMake(600, self.center.y);
-    [UIView animateWithDuration:DismissAnimationInterval
-                     animations:^{
-                         self.center = finishPoint;
-                         self.transform = CGAffineTransformMakeRotation(1);
-                     }completion:^(BOOL complete){
-                         [self removeFromSuperview];
-                     }];
-    [delegate cardSwipedRight:self];
-}
-
-- (void)leftClickAction {
-    CGPoint finishPoint = CGPointMake(-600, self.center.y);
-    [UIView animateWithDuration:DismissAnimationInterval
-                     animations:^{
-                         self.center = finishPoint;
-                         self.transform = CGAffineTransformMakeRotation(-1);
                      }completion:^(BOOL complete){
                          [self removeFromSuperview];
                      }];
