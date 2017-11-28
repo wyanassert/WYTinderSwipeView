@@ -33,4 +33,4 @@ An Univerasl Swipe View Imitate Tinder
 
 4. Run project in WYTinderSwipeViewDemo directory for using.
 
-5. ![Demo](ScreenShoot/Demo.gif)
+5. ![Demo](Demo.gif)
