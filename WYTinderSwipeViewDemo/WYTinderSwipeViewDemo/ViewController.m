@@ -64,7 +64,7 @@
 
 #pragma mark -
 - (BOOL)loadMoreDataInsideSwipeViewWithCompletion:(WTSDraggableViewLoadMoreBlock)block {
-    static NSInteger loadTime = 5;
+    static NSInteger loadTime = 3;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(loadTime < 0) {
@@ -74,7 +74,7 @@
             return ;
         }
         NSMutableArray <WYTinderSwipeDisplayViewModel *> *array = [NSMutableArray array];
-        NSUInteger n = 10;
+        NSUInteger n = 3;
         while (n--) {
             WYTinderSwipeDisplayViewModel *model = [[WYTinderSwipeDisplayViewModel alloc] init];
             NSMutableArray<NSString *> *imageArray = [NSMutableArray array];
